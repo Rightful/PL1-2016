@@ -16,6 +16,8 @@ public class SimpleParser implements Parser {
     private static final int SIZE = 9000;
     private static final String ATTR_ZINDEX = "START:Z:";
 
+    GenomeList genome = new GenomeList();
+
     private Map<Integer, List<Integer>> reversedLinks;
     /**
      * Map containing each column and how many segments the column contains.
@@ -43,6 +45,8 @@ public class SimpleParser implements Parser {
         columns = new TreeMap<Integer, List<Integer>>();
         reversedLinks = new HashMap<>();
         read(inputStream);
+        System.out.println(genome.toString(nodeCollection.getNodes().size()));
+
         return nodeCollection;
     }
 
@@ -110,7 +114,7 @@ public class SimpleParser implements Parser {
        line = line.trim();
        String[] data = line.split("\\s+");
        switch (data[0].charAt(0)) {
-       case 'H':
+       case 'H': parseHeaderLine(data);
            break;
        case 'S': parseSegmentLine(data);
            break;
@@ -121,6 +125,20 @@ public class SimpleParser implements Parser {
        }
     }
 
+    private void parseHeaderLine(String[] data) {
+        String[] a = data[1].split(":");
+        if (a[0].equals("ORI")) {
+            String[] gnomes = a[2].split(";");
+            for (String gnomeId :
+                    gnomes) {
+                gnomeId = gnomeId.split("\\.")[0];
+                SimpleGenome newGenome = new SimpleGenome(gnomeId);
+                genome.put(gnomeId, newGenome);
+
+            }
+        }
+    }
+
     /**
      * Parse a segment line according to the GFA specification.
      * @param data contents of line separated by whitespace.
@@ -128,6 +146,11 @@ public class SimpleParser implements Parser {
     private void parseSegmentLine(String[] data) {
         int id = Integer.parseInt(data[1]);
         String seq = data[2];
+        String[] gnomes = data[4].split(":")[2].split(";");
+        for (int i = 0; i < gnomes.length; i++) {
+            gnomes[i] = gnomes[i].split("\\.")[0];
+        }
+       
         int column = 0;
         if (data[data.length - 1].contains(ATTR_ZINDEX)) {
             column = Integer.parseInt(data[data.length - 1].split(":")[2]);
@@ -140,11 +163,20 @@ public class SimpleParser implements Parser {
             }
         }
         if (!nodeCollection.containsKey(id)) {
-            nodeCollection.put(id, new Segment(id, seq, column));
+            Segment segment = new Segment(id, seq, column);
+            for (String gId:gnomes) {
+                genome.put(gId, segment);
+            }
+            nodeCollection.put(id, segment);
         } else {
             nodeCollection.get(id).setData(seq);
             nodeCollection.get(id).setColumn(column);
+            for (String gId:gnomes) {
+                genome.put(gId, (Segment) nodeCollection.get(id));
+            }
         }
+
+
     }
 
     /**
