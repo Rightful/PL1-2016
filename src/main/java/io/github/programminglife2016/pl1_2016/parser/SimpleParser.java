@@ -3,6 +3,9 @@ package io.github.programminglife2016.pl1_2016.parser;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Temporary simple parser for parsing .gfa files.
@@ -10,11 +13,18 @@ import java.io.InputStreamReader;
 public class SimpleParser implements Parser {
     private static final int SIZE = 9000;
     private static final String ATTR_ZINDEX = "START:Z:";
+    private static final String ORIG_GENOME = "ORI:Z:";
+    private static final String REFER_GENOME = "CRD:Z:";
 
     /**
      * Map containing the DNA seqments.
      */
     private NodeCollection nodeCollection;
+
+    /**
+     * Array containing all genomes.
+     */
+    private IGenome[] genomes;
 
     /**
      * Create parser object.
@@ -45,7 +55,7 @@ public class SimpleParser implements Parser {
             while ((line = reader.readLine()) != null) {
                 parseLine(line);
             }
-            PositionManager positionHandler = new PositionHandler(this.nodeCollection);
+            PositionManager positionHandler = new PositionHandler(this.nodeCollection, genomes);
             positionHandler.calculatePositions();
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +78,7 @@ public class SimpleParser implements Parser {
        line = line.trim();
        String[] data = line.split("\\s+");
        switch (data[0].charAt(0)) {
-       case 'H':
+       case 'H': collectAllGenomes(data);
            break;
        case 'S': parseSegmentLine(data);
            break;
@@ -87,15 +97,33 @@ public class SimpleParser implements Parser {
         int id = Integer.parseInt(data[1]);
         String seq = data[2];
         int column = 0;
+        List<String> oriGenomes = new ArrayList<>();
+        String crdGenome;
+        String[] tmpCrd;
         if (data[data.length - 1].contains(ATTR_ZINDEX)) {
             column = Integer.parseInt(data[data.length - 1].split(":")[2]);
         }
+        if (data[4].contains(ORIG_GENOME)) {
+            oriGenomes = Arrays.asList(data[4].replaceAll(ORIG_GENOME, "").split(";"));
+        }
+        if (data[5].contains(REFER_GENOME)) {
+            tmpCrd = data[5].replaceAll(REFER_GENOME, "").split(";");
+            if(tmpCrd.length > 1)
+                throw new IllegalArgumentException ("Multiple CRD's in segment " + id);
+            crdGenome = tmpCrd[0];
+        }
+        else{
+            throw new IllegalArgumentException ("No CRD's found in segment " + id);
+        }
         if (!nodeCollection.containsKey(id)) {
-            nodeCollection.put(id, new Segment(id, seq, column));
+            nodeCollection.put(id, new Segment(id, seq, column, oriGenomes, crdGenome));
         } else {
             nodeCollection.get(id).setData(seq);
             nodeCollection.get(id).setColumn(column);
+            nodeCollection.get(id).getOriGenomes().addAll(oriGenomes);
+            nodeCollection.get(id).setCrdGenome(crdGenome);
         }
+        fillGenomes(id, oriGenomes);
     }
 
     /**
@@ -120,5 +148,18 @@ public class SimpleParser implements Parser {
      */
     public NodeCollection getSegmentCollection() {
         return nodeCollection;
+    }
+
+    private void collectAllGenomes(String[] data) {
+        if(!data[1].contains(ORIG_GENOME))
+            return;
+        genomes = Arrays.asList(data[1].replaceAll(ORIG_GENOME, "").split(";")).stream().map(x -> new Genome(x)).toArray((IGenome[]::new));
+    }
+
+    private void fillGenomes(int Id, List<String> oriGenomes) {
+        for(IGenome genome : genomes) {
+            if(oriGenomes.contains(genome.getName()))
+                genome.getNodesIds().add(Id);
+        }
     }
 }
