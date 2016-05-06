@@ -21,6 +21,8 @@ public class SimpleParser implements Parser {
      */
     private NodeCollection nodeCollection;
 
+    private NodeCollection bubbles;
+
     /**
      * Array containing all genomes.
      */
@@ -40,7 +42,8 @@ public class SimpleParser implements Parser {
      */
     public JsonSerializable parse(InputStream inputStream) {
         read(inputStream);
-        return nodeCollection;
+//        return nodeCollection;
+        return bubbles;
     }
 
     /**
@@ -55,8 +58,10 @@ public class SimpleParser implements Parser {
             while ((line = reader.readLine()) != null) {
                 parseLine(line);
             }
-            PositionManager positionHandler = new PositionHandler(this.nodeCollection, genomes);
+            PositionHandler positionHandler = new PositionHandler(this.nodeCollection, genomes);
             positionHandler.calculatePositions();
+            positionHandler.getMutations();
+            bubbles = positionHandler.bubbles;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

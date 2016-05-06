@@ -22,7 +22,7 @@ $(function() { // on dom ready
   }
 
   GraphFactory.prototype.createNode = function(node) {
-    var getName = name => name.length > 4 ? name.substring(0, 4) + "..." : name;
+    var getName = name => name;//.length > 4 ? name.substring(0, 4) + "..." : name;
     this.nodeTemplate["data"]["id"] = node.id;
     this.nodeTemplate["data"]["name"] = getName(node.data);
     this.nodeTemplate["data"]["weight"] = node.bubble ? 100 : 50;

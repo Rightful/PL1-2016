@@ -33,7 +33,7 @@ public class NodeSerializer implements JsonSerializer<Node> {
         // TODO: check if node is a bubble
         jsonObject.add("bubble", new JsonPrimitive(false));
         if (node.getData() != null) {
-            jsonObject.add("data", new JsonPrimitive(node.getCrdGenome()));
+            jsonObject.add("data", new JsonPrimitive(node.getData()));
         } else {
             jsonObject.add("data", new JsonPrimitive(""));
         }

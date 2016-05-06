@@ -36,7 +36,7 @@ public class NodeCollectionSerializer implements JsonSerializer<NodeCollection> 
         jsonObject.add("nodes", nodes);
         JsonArray edges = new JsonArray();
         for (Node node : nodeCollection.getNodes()) {
-            for (Node link : node.getLinks()) {
+            for (Node link : node.getBackLinks()) {
                 JsonObject edge = new JsonObject();
                 edge.add("from", new JsonPrimitive(node.getId()));
                 edge.add("to", new JsonPrimitive(link.getId()));
