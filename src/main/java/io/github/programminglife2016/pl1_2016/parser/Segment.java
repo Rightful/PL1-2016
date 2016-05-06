@@ -29,6 +29,18 @@ public class Segment implements Node {
     private List<Node> links;
     private List<Node> backLinks;
 
+
+    /**
+     * Genomes of origin.
+     */
+    private List<String> oriGenomes;
+
+    /**
+     * Genome supplying the coordinates.
+     */
+    private String crdGenome;
+
+
     /**
      * x position of the segment in the graph.
      */
@@ -45,12 +57,14 @@ public class Segment implements Node {
      * @param data sequence data of this segment.
      * @param column index of this segment.
      */
-    public Segment(int id, String data, int column) {
+    public Segment(int id, String data, int column, List<String> oriGenomes, String crdGenome) {
         this.id = id;
         this.data = data;
         this.column = column;
         this.links = new ArrayList<Node>();
         this.backLinks = new ArrayList<Node>();
+        this.oriGenomes = oriGenomes;
+        this.crdGenome = crdGenome;
     }
 
     /**
@@ -61,6 +75,7 @@ public class Segment implements Node {
         this.id = id;
         this.links = new ArrayList<Node>();
         this.backLinks = new ArrayList<Node>();
+        this.oriGenomes = new ArrayList<String>();
     }
 
     /**
@@ -164,6 +179,27 @@ public class Segment implements Node {
     public int getY() {
         return y;
     }
+
+    /**
+     * Get genomes of origin of this segment.
+     * @return list of genomes of origin.
+     */
+    public List<String> getOriGenomes() {
+        return oriGenomes;
+    }
+
+    /**
+     * Get genome supplying the coordinates of this segment.
+     * @return genome name supplying the coordinates.
+     */
+    public String getCrdGenome() { return crdGenome; }
+
+    /**
+     * Set genome supplying the coordinates of this segment.
+     *
+     * @param crdGenome genome name supplying the coordinates
+     */
+    public void setCrdGenome(String crdGenome) { this.crdGenome = crdGenome; }
 
     /**
      * Return string representation of segment.

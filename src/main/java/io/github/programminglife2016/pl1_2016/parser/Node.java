@@ -1,6 +1,7 @@
 package io.github.programminglife2016.pl1_2016.parser;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * An object that represents a displayable bubble/segment.
@@ -90,4 +91,25 @@ public interface Node {
      * @return the column of this node
      */
     int getColumn();
+
+    /**
+     * Get genomes of origin of this segment.
+     *
+     * @return list of genomes of origin
+     */
+    List<String> getOriGenomes();
+
+    /**
+     * Get genome supplying the coordinates of this segment.
+     *
+     * @return genome name supplying the coordinates
+     */
+    String getCrdGenome();
+
+    /**
+     * Set genome supplying the coordinates of this segment.
+     *
+     * @param crdGenome genome name supplying the coordinates
+     */
+    void setCrdGenome(String crdGenome);
 }
