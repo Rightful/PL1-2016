@@ -12,7 +12,6 @@ public class PositionHandler implements PositionManager {
      * Spacing between segments in the graph.
      */
     private static final int SPACING = 100;
-    private static final String MAIN_GENOME = "MT_H37RV_BRD_V5.ref.fasta";
 
     /**
      * Map containing the DNA seqments.
@@ -20,8 +19,8 @@ public class PositionHandler implements PositionManager {
     private NodeCollection nodeCollection;
     private IGenome[] genomes;
     private List<Mutation> mutations = new ArrayList<>();
-    private NodeCollection mutationCollection;
-    public NodeCollection bubbles;
+    public NodeCollection nodesToShow;
+    private NodeCollection bubbles;
     /**
      * Create a PositionHandler.
      * @param nodeCollection Map containing all the segments which positions need to be calculated.
@@ -82,16 +81,16 @@ public class PositionHandler implements PositionManager {
         }
 
         setOtherLinks();
-        mutationCollection = new NodeList(mutations.size());
-        for (int i = 0; i < mutations.size(); i++)
-            mutationCollection.put(i + 1, mutations.get(i));
+//        mutationCollection = new NodeList(mutations.size());
+//        for (int i = 0; i < mutations.size(); i++)
+//            mutationCollection.put(i + 1, mutations.get(i));
         setMainLinks();
         createBubbles();
     }
 
     private void setMainLinks(){
         Node lastNode = null;
-        for (Node node : mutationCollection) {
+        for (Node node : mutations) {//mutationCollection) {
             if(node.getCrdGenome() != null && node.getCrdGenome().contains(".ref")) {
                 node.getBackLinks().clear();
                 if (lastNode != null)
@@ -119,6 +118,7 @@ public class PositionHandler implements PositionManager {
     // TODO: replace by clustering algorithm
     private void createBubbles(){
         bubbles = new NodeList(100);
+        nodesToShow = new NodeList(100);
         List<Mutation> tempBubble = new ArrayList<>();
         int i = 0;
         int id = 0;
@@ -149,10 +149,11 @@ public class PositionHandler implements PositionManager {
         mutations = mutations.stream().filter(x -> x.getCrdGenome() != null).collect(Collectors.toList());
         if(mutations.size() == 0)
             return;
-        Mutation temp = new Mutation(id);
+        Bubble temp = new Bubble(id);//, mutations);
         temp.setXY(posX, 0);
         temp.setData("Mutations: " + mutations.stream().mapToInt(m -> m.getMutations()).sum() +
                 " Start: " + mutations.stream().mapToInt(m -> m.getColumn()).min().getAsInt());
-        bubbles.put(id+1, temp);
+        nodesToShow.put(id+1, temp);
+        bubbles.put(id+1, new Bubble(id, mutations));
     }
 }

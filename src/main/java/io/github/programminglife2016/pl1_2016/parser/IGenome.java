@@ -10,6 +10,4 @@ public interface IGenome {
     String getName();
 
     List<Integer> getNodesIds();
-
-    List<String> getMutations();
 }
