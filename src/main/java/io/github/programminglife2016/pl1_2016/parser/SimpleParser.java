@@ -11,7 +11,7 @@ import java.util.List;
  * Temporary simple parser for parsing .gfa files.
  */
 public class SimpleParser implements Parser {
-    private static final int SIZE = 9000;
+    private static final int SIZE = 900000;
     private static final String ATTR_ZINDEX = "START:Z:";
     private static final String ORIG_GENOME = "ORI:Z:";
     private static final String REFER_GENOME = "CRD:Z:";
@@ -62,6 +62,7 @@ public class SimpleParser implements Parser {
             positionHandler.calculatePositions();
             positionHandler.getMutations();
             nodesToShow = positionHandler.nodesToShow;
+            System.out.println("Done bubbling");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -20,7 +20,7 @@ public final class Launcher {
      * @throws IOException thrown if the port is in use.
      */
     public static void main(String[] args) throws IOException {
-        InputStream is = Launcher.class.getResourceAsStream("/genomes/TB10.gfa");
+        InputStream is = Launcher.class.getResourceAsStream("/genomes/TB328.gfa");
         JsonSerializable jsonSerializable = new SimpleParser().parse(is);
         Server server = new RestServer(jsonSerializable);
         server.startServer();
