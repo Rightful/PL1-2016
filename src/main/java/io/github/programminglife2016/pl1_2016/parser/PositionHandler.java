@@ -138,12 +138,8 @@ public class PositionHandler implements PositionManager {
             }
         }
 
-        Node lastNode = null;
-        for (Node node : bubbles) {
-            if (lastNode != null)
-                node.addBackLink(lastNode);
-            lastNode = node;
-        }
+        connectBackLinks(bubbles);
+        connectBackLinks(nodesToShow);
     }
     private void createBubble(List<Mutation> mutations, int id, int posX){
         mutations = mutations.stream().filter(x -> x.getCrdGenome() != null).collect(Collectors.toList());
@@ -155,5 +151,14 @@ public class PositionHandler implements PositionManager {
                 " Start: " + mutations.stream().mapToInt(m -> m.getColumn()).min().getAsInt());
         nodesToShow.put(id+1, temp);
         bubbles.put(id+1, new Bubble(id, mutations));
+    }
+
+    private void connectBackLinks(NodeCollection nodes){
+        Node lastNode = null;
+        for (Node node : nodes) {
+            if (lastNode != null)
+                node.addBackLink(lastNode);
+            lastNode = node;
+        }
     }
 }
