@@ -38,10 +38,12 @@ public class PositionHandler implements PositionManager {
      * Calculate the positions of the nodes, and set the positions in each node.
      */
     public void calculatePositions() {
-        int posY = 0;
-        for (IGenome genome : genomes) {
-            constructBranches(genome, posY);
-            posY += 50;
+        if (genomes != null) {
+            int posY = 0;
+            for (IGenome genome : genomes) {
+                constructBranches(genome, posY);
+                posY += 50;
+            }
         }
     }
 
@@ -66,11 +68,12 @@ public class PositionHandler implements PositionManager {
     public void getMutations() {
         Mutation temp;
         List<Integer> addedPos = new ArrayList<>();
+        int totalGenomes = genomes == null ? 0 : genomes.length;
         for (Node node : nodeCollection) {
             if (addedPos.contains(node.getColumn()))
                 continue;
             addedPos.add(node.getColumn());
-            temp = new Mutation(mutations.size(), node.getColumn(), node.getOriGenomes(), node.getCrdGenome(), genomes.length);
+            temp = new Mutation(mutations.size(), node.getColumn(), node.getOriGenomes(), node.getCrdGenome(), totalGenomes);
             temp.setXY(node.getX(), node.getY());
 //            if(node.getCrdGenome().contains("MT"))
                 temp.getBackLinks().addAll(node.getBackLinks());

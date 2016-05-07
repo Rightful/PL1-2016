@@ -30,7 +30,7 @@ public class SimpleParserTest {
      */
     @Test
     public void testSegmentLine() {
-        parser.parse(stringToInputStream("S	1	TTGA	*	ORI:Z:MT_H37RV_BRD_V5.ref.fasta;"));
+        parser.parse(stringToInputStream("S	1	TTGA	*	ORI:Z:MT_H37RV_BRD_V5.ref.fasta; CRD:Z:MT START:Z:0"));
         NodeCollection segmentMap = parser.getSegmentCollection();
         Node node = segmentMap.get(1);
         assertEquals(1, node.getId());
@@ -43,9 +43,10 @@ public class SimpleParserTest {
     @Test
     public void testLinkLine() {
         final String gfaFile = "H	VN:Z:1.0\n"
-                               + "S 1 AGAT\n"
-                               + "S 2 TTGC\n"
-                               + "S 3 ATGC\n"
+                               + "H\tORI:Z:MT;TKK\n"
+                               + "S 1 AGAT * ORI:Z:MT;TKK CRD:Z:MT\n"
+                               + "S 2 TTGC * ORI:Z:MT;TKK CRD:Z:MT\n"
+                               + "S 3 ATGC * ORI:Z:MT;TKK CRD:Z:MT\n"
                                + "L	1	+	2	+	0M";
         parser.parse(stringToInputStream(gfaFile));
         NodeCollection segmentMap = parser.getSegmentCollection();
@@ -61,8 +62,9 @@ public class SimpleParserTest {
     @Test
     public void testParseZIndex() {
         final String gfaFile = "H	VN:Z:1.0\n"
-                + "S 1 AGAT\n"
-                + "S 2 TTGC\n"
+                + "H\tORI:Z:MT;TKK\n"
+                + "S 1 AGAT * ORI:Z:MT;TKK CRD:Z:MT\n"
+                + "S 2 TTGC * ORI:Z:MT;TKK CRD:Z:MT\n"
                 + "S	3	C	*	ORI:Z:TKK_02_0008.fasta	CRD:Z:TKK_02_0008.fasta	CRDCTG:Z:NZ_KK"
                 + "327777.1	CTG:Z:NZ_KK327777.1	START:Z:1451\n"
                 + "L	1	+	2	+	0M";
@@ -77,9 +79,10 @@ public class SimpleParserTest {
     @Test
     public void testCalculateMultipleNode() {
         final String gfaFile = "H	VN:Z:1.0\n"
-                + "S    1   T   *   CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
+                + "H\tORI:Z:MT;TKK\n"
+                + "S    1   T   *   ORI:Z:MT;TKK CRD:Z:MT CRDCTG:Z:NZ CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
                 + "MT_H37RV_BRD_V5;NZ_KK350895.1 START:Z:0 \n"
-                + "S    2   T   *   CTG:Z:NZ_KK327777.1;"
+                + "S    2   T   *   ORI:Z:MT;TKK CRD:Z:MT CRDCTG:Z:NZ CTG:Z:NZ_KK327777.1;"
                 + "NZ_KK327775.1;MT_H37RV_BRD_V5;NZ_KK350895.1 START:Z:0 \n"
                 + "S	3	C	*	ORI:Z:TKK_02_0008.fasta	"
                 + "CRD:Z:TKK_02_0008.fasta	CRDCTG:Z:NZ_KK \n"
@@ -97,9 +100,12 @@ public class SimpleParserTest {
     @Test
     public void testCalculateMultipleNodeOnOtherAxis() {
         final String gfaFile = "H	VN:Z:1.0\n"
-                + "S    1   T   *   CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
+                + "H\tORI:Z:MT;TKK\n"
+                + "S    1   T   *   ORI:Z:MT;TKK CRD:Z:MT CRDCTG:Z:NZ "
+                + "CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
                 + "MT_H37RV_BRD_V5;NZ_KK350895.1 START:Z:0 \n"
-                + "S    2   T   *   CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
+                + "S    2   T   *   ORI:Z:MT;TKK CRD:Z:MT CRDCTG:Z:NZ "
+                + "CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
                 + "MT_H37RV_BRD_V5;NZ_KK350895.1 START:Z:0 \n"
                 + "S	3	C	*	ORI:Z:TKK_02_0008.fasta	"
                 + "CRD:Z:TKK_02_0008.fasta	CRDCTG:Z:NZ_KK \n"
@@ -117,9 +123,12 @@ public class SimpleParserTest {
     @Test
     public void testOneNodeInColumn() {
         final String gfaFile = "H	VN:Z:1.0\n"
-                + "S    1   T   *   CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
+                + "H\tORI:Z:MT;TKK\n"
+                + "S    1   T   *   ORI:Z:MT;TKK CRD:Z:MT CRDCTG:Z:NZ "
+                + "CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
                 + "MT_H37RV_BRD_V5;NZ_KK350895.1 START:Z:0 \n"
-                + "S    2   T   *   CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
+                + "S    2   T   *   ORI:Z:MT;TKK CRD:Z:MT CRDCTG:Z:NZ "
+                + "CTG:Z:NZ_KK327777.1;NZ_KK327775.1;"
                 + "MT_H37RV_BRD_V5;NZ_KK350895.1 START:Z:0 \n"
                 + "S	3	C	*	ORI:Z:TKK_02_0008.fasta	"
                 + "CRD:Z:TKK_02_0008.fasta	CRDCTG:Z:NZ_KK \n"

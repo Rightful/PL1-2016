@@ -89,11 +89,11 @@ public abstract class SegmentCollectionTest {
         Segment segment3 = new Segment(3, "three", 3, new ArrayList<String>(), "");
         Segment segment4 = new Segment(4, "four", 4, new ArrayList<String>(), "");
         Segment segment5 = new Segment(5, "five", 5, new ArrayList<String>(), "");
-        segment1.addLink(segment2);
-        segment1.addLink(segment3);
-        segment1.addLink(segment5);
-        segment3.addLink(segment4);
-        segment4.addLink(segment5);
+        segment1.addBackLink(segment2);
+        segment1.addBackLink(segment3);
+        segment1.addBackLink(segment5);
+        segment3.addBackLink(segment4);
+        segment4.addBackLink(segment5);
         nodeCollection.put(1, segment1);
         nodeCollection.put(2, segment2);
         nodeCollection.put(3, segment3);

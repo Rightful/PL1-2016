@@ -162,9 +162,10 @@ public class SimpleParser implements Parser {
     }
 
     private void fillGenomes(int Id, List<String> oriGenomes) {
-        for(IGenome genome : genomes) {
-            if(oriGenomes.contains(genome.getName()))
-                genome.getNodesIds().add(Id);
-        }
+        if (genomes != null)
+            for(IGenome genome : genomes) {
+                if(oriGenomes.contains(genome.getName()))
+                    genome.getNodesIds().add(Id);
+            }
     }
 }
