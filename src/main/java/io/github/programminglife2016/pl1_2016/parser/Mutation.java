@@ -48,6 +48,8 @@ public class Mutation implements Node {
     private int y;
 
     private int mutations;
+
+    private String mutationType;
     /**
      * Create segment with id and sequence data.
      * @param id identifier of this segment.
@@ -98,7 +100,8 @@ public class Mutation implements Node {
      * @return string of sequence data.
      */
     public String getData() {
-        return "Genome: "+crdGenome+"\\nMutations: " + mutations + "\\nUnchanged: " + getUnchanged();
+        return "Start:" + column + " " + crdGenome;
+//        return "Genome: "+crdGenome+"\\nMutations: " + mutations + "\\nUnchanged: " + getUnchanged();
     }
 
     /**

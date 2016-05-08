@@ -1,5 +1,7 @@
 package io.github.programminglife2016.pl1_2016.parser;
 
+import io.github.programminglife2016.pl1_2016.parser.designer.StructureDesigner;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -58,10 +60,11 @@ public class SimpleParser implements Parser {
             while ((line = reader.readLine()) != null) {
                 parseLine(line);
             }
-            PositionHandler positionHandler = new PositionHandler(this.nodeCollection, genomes);
-            positionHandler.calculatePositions();
-            positionHandler.getMutations();
-            nodesToShow = positionHandler.nodesToShow;
+            StructureDesigner structureDesigner = new StructureDesigner(nodeCollection, genomes);
+            structureDesigner.design();
+            nodesToShow = structureDesigner.getNodesToShow();
+//            positionHandler.getMutations();
+//            nodesToShow = positionHandler.nodesToShow;
             System.out.println("Done bubbling");
         } catch (Exception e) {
             e.printStackTrace();
