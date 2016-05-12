@@ -45,6 +45,10 @@ public interface TreeNode {
     void setWeight(double weight);
 
     /**
+     * Clone the treenode.
+     */
+    TreeNode clone();
+    /**
      * Get the children from this node.
      * @return list of children.
      */

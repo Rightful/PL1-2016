@@ -29,4 +29,9 @@ public class SpecimenMap extends HashMap<String, Subject> implements SpecimenCol
     public Collection<Subject> getSpecimen() {
         return values();
     }
+
+    @Override
+    public String toJson() {
+        return null;
+    }
 }

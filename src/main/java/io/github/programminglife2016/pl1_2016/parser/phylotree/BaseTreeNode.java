@@ -90,6 +90,12 @@ public class BaseTreeNode implements TreeNode {
         this.weight = weight;
     }
 
+    @Override
+    public TreeNode clone() {
+        TreeNode treeNode = new BaseTreeNode(this.getName(), this.getWeight(), this.getChildren(), this.parent);
+        return treeNode;
+    }
+
     /**
      * Get name of tree node.
      * @return name of tree.
@@ -128,9 +134,6 @@ public class BaseTreeNode implements TreeNode {
      */
     @Override
     public String toString() {
-        return "[" + this.getName() + " " + this.getWeight()
-                + " {" + children.stream()
-                                 .map(Object::toString)
-                                 .collect(joining(", ")) + "}]";
+        return this.getName() + " " +  this.getWeight();
     }
 }

@@ -4,7 +4,6 @@ import io.github.programminglife2016.pl1_2016.parser.JsonSerializable;
 import io.github.programminglife2016.pl1_2016.parser.Parser;
 import io.github.programminglife2016.pl1_2016.parser.TreeNodeCollection;
 import io.github.programminglife2016.pl1_2016.parser.TreeNodeList;
-
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,12 +12,11 @@ import java.util.stream.Collectors;
 /**
  * Class for parsing a .nwk file to an internal tree structure.
  */
-public class PhyloGeneticTreeParser implements Parser {
+public class PhyloGeneticTreeParser  {
 
-    @Override
-    public JsonSerializable parse(InputStream inputStream) {
+    public TreeNode parse(InputStream inputStream) {
         String s = inputStreamToString(inputStream);
-        return parseTokensFromString(s);
+        return parseTokensFromString(s).getRoot();
     }
 
     private String inputStreamToString(InputStream inputStream) {
