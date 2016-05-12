@@ -11,7 +11,7 @@ public class Segment implements Node {
     /**
      * Id of DNA segment.
      */
-    private int id;
+    private String id;
 
     /**
      * Contents of DNA segment.
@@ -51,13 +51,15 @@ public class Segment implements Node {
      */
     private int y;
 
+    private Tuple[] idPos;
+
     /**
      * Create segment with id and sequence data.
      * @param id identifier of this segment.
      * @param data sequence data of this segment.
      * @param column index of this segment.
      */
-    public Segment(int id, String data, int column, List<String> oriGenomes, String crdGenome) {
+    public Segment(String id, String data, int column, List<String> oriGenomes, String crdGenome, int genomesSize) {
         this.id = id;
         this.data = data;
         this.column = column;
@@ -65,17 +67,19 @@ public class Segment implements Node {
         this.backLinks = new ArrayList<Node>();
         this.oriGenomes = oriGenomes;
         this.crdGenome = crdGenome;
+        idPos = new Tuple[genomesSize];
     }
 
     /**
      * Create segment with id.
      * @param id identifier of this segment.
      */
-    public Segment(int id) {
+    public Segment(String id, int genomesSize) {
         this.id = id;
         this.links = new ArrayList<Node>();
         this.backLinks = new ArrayList<Node>();
         this.oriGenomes = new ArrayList<String>();
+        idPos = new Tuple[genomesSize];
     }
 
     /**
@@ -103,7 +107,7 @@ public class Segment implements Node {
     public String getData() {
         return data;
     }
-
+//id + " " + crdGenome + " c:" + column + " x:" + x + " l:" + data.length();//
     /**
      * Set sequence data of this segment.
      * @param data to set sequence data.
@@ -134,7 +138,7 @@ public class Segment implements Node {
      * Get the id if this segment.
      * @return id of this segment.
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -201,6 +205,10 @@ public class Segment implements Node {
      */
     public void setCrdGenome(String crdGenome) { this.crdGenome = crdGenome; }
 
+
+    public Tuple[] getIdPos(){
+        return idPos;
+    }
     /**
      * Return string representation of segment.
      * @return string representing segment.

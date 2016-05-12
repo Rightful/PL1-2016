@@ -62,7 +62,7 @@ public interface Node {
      *
      * @return id of the node
      */
-    int getId();
+    String getId();
 
     /**
      * Get the data of the node.
@@ -112,4 +112,6 @@ public interface Node {
      * @param crdGenome genome name supplying the coordinates
      */
     void setCrdGenome(String crdGenome);
+
+    Tuple[] getIdPos();
 }

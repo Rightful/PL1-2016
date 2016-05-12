@@ -25,6 +25,7 @@ $(function() { // on dom ready
     var getName = name => name;//.length > 4 ? name.substring(0, 4) + "..." : name;
     this.nodeTemplate["data"]["id"] = node.id;
     this.nodeTemplate["data"]["name"] = getName(node.data);
+//    this.nodeTemplate["data"]["length"] = getName(node.data).length*6+"px";
     this.nodeTemplate["data"]["weight"] = node.bubble ? 100 : 50;
     this.nodeTemplate["position"]["x"] = node.x + 550;
     this.nodeTemplate["position"]["y"] = node.y + 450;
@@ -34,7 +35,8 @@ $(function() { // on dom ready
         name: getName(node.data),
         weight: node.bubble ? 100 : 50,
         faveColor: '#6FB1FC',
-        faveShape: 'ellipse'
+        faveShape: 'ellipse',
+        length: getName(node.data).length*6+"px"
       },
       position: {
         x: node.x + 550,
@@ -224,11 +226,12 @@ $(function() { // on dom ready
                    {"selection-box-color":"#AAD8FF","selection-box-border-color":"#8BB0D0","selection-box-opacity":"0.5"}},
                 {"selector":"node",
                    "style":
-                    {"width":"mapData(score, 0, 0.006769776522008331, 20, 60)",
-                     "height":"mapData(score, 0, 0.006769776522008331, 20, 60)",
+                    {"width": "data(length)",//"100px",//"mapData(score, 0, 0.006769776522008331, 20, 60)",
+                     "height": "30px",//"mapData(score, 0, 0.006769776522008331, 20, 60)",
                      "content":"data(name)","font-size":"12px","text-valign":"center","text-halign":"center",
                      "background-color":"#94AAC7","text-outline-color":"#94AAC7","text-outline-width":"2px","color":"#fff", //#555
-                     "overlayfghjklo`-padding":"6px","z-index":"10"}},
+                     "overlayfghjklo`-padding":"6px","z-index":"10",
+                     "shape":"roundrectangle"}},
                 {"selector":"node[?attr]","style":{"shape":"rectangle","background-color":"#aaa","text-outline-color":"#aaa",
                     "width":"16px","height":"16px","font-size":"6px","z-index":"1"}},
                 {"selector":"node[?querzy]","style":{"background-clip":"none","background-fit":"contain"}},

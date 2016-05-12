@@ -11,7 +11,7 @@ public class Bubble implements Node {
     /**
      * Id of DNA segment.
      */
-    private int id;
+    private String id;
 
     /**
      * z-index of Segment in graph.
@@ -23,7 +23,7 @@ public class Bubble implements Node {
      */
     private List<Node> links;
     private List<Node> backLinks;
-    private List<Mutation> mutationsList;
+    private List<Node> nodesList;
 
 
     private String data;
@@ -44,11 +44,11 @@ public class Bubble implements Node {
      * Create segment with id and sequence data.
      * @param id identifier of this segment.
      */
-    public Bubble(int id, List<Mutation> mutationsList) {
+    public Bubble(String id, List<Node> nodeList) {
         this.id = id;
         this.links = new ArrayList<Node>();
         this.backLinks = new ArrayList<Node>();
-        this.mutationsList = mutationsList;
+        this.nodesList = nodeList;
         data = getData();
     }
 
@@ -56,11 +56,11 @@ public class Bubble implements Node {
      * Create segment with id.
      * @param id identifier of this segment.
      */
-    public Bubble(int id) {
+    public Bubble(String id) {
         this.id = id;
         this.links = new ArrayList<Node>();
         this.backLinks = new ArrayList<Node>();
-        this.mutationsList = new ArrayList<>();
+        this.nodesList = new ArrayList<>();
     }
 
     /**
@@ -111,7 +111,7 @@ public class Bubble implements Node {
      * Get the id if this segment.
      * @return id of this segment.
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -185,12 +185,16 @@ public class Bubble implements Node {
 
 
 
-    public List<Mutation> getMutationsList() {
-        return mutationsList;
+    public List<Node> getNodesList() {
+        return nodesList;
     }
 
-    public void setMutationsList(List<Mutation> mutationsList) {
-        this.mutationsList = mutationsList;
+    public void setNodesList(List<Node> nodesList) {
+        this.nodesList = nodesList;
+    }
+
+    public Tuple[] getIdPos(){
+        return null;
     }
 
     /**

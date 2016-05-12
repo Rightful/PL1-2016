@@ -125,7 +125,7 @@ public class SimpleParser implements Parser {
             throw new IllegalArgumentException ("No CRD's found in segment " + id);
         }
         if (!nodeCollection.containsKey(id)) {
-            nodeCollection.put(id, new Segment(id, seq, column, oriGenomes, crdGenome));
+            nodeCollection.put(id, new Segment(id, seq, column, oriGenomes, crdGenome, genomes.length));
         } else {
             nodeCollection.get(id).setData(seq);
             nodeCollection.get(id).setColumn(column);
@@ -145,7 +145,7 @@ public class SimpleParser implements Parser {
         int to = Integer.parseInt(data[3]);
 
         if (!nodeCollection.containsKey(to)) {
-            nodeCollection.put(to, new Segment(to));
+            nodeCollection.put(to, new Segment(to, genomes.length));
         }
         nodeCollection.get(from).addLink(nodeCollection.get(to));
         nodeCollection.get(to).addBackLink(nodeCollection.get(from));

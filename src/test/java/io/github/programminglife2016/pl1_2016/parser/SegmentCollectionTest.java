@@ -84,11 +84,11 @@ public abstract class SegmentCollectionTest {
      */
     @Test
     public void testToJson() {
-        Segment segment1 = new Segment(1, "one", 1, new ArrayList<String>(), "");
-        Segment segment2 = new Segment(2, "two", 2, new ArrayList<String>(), "");
-        Segment segment3 = new Segment(3, "three", 3, new ArrayList<String>(), "");
-        Segment segment4 = new Segment(4, "four", 4, new ArrayList<String>(), "");
-        Segment segment5 = new Segment(5, "five", 5, new ArrayList<String>(), "");
+        Segment segment1 = new Segment(1, "one", 1, new ArrayList<String>(), "", 0);
+        Segment segment2 = new Segment(2, "two", 2, new ArrayList<String>(), "", 0);
+        Segment segment3 = new Segment(3, "three", 3, new ArrayList<String>(), "", 0);
+        Segment segment4 = new Segment(4, "four", 4, new ArrayList<String>(), "", 0);
+        Segment segment5 = new Segment(5, "five", 5, new ArrayList<String>(), "", 0);
         segment1.addBackLink(segment2);
         segment1.addBackLink(segment3);
         segment1.addBackLink(segment5);

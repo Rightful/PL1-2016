@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 /**
  * Created by Kamran Tadzjibov on 08.05.2016.
  */
-public class StructureDesigner implements IDesigner {
+public class StructureDesigner implements Designer {
 
     private NodeCollection nodeCollection;
     private IGenome[] genomes;
-    private List<Mutation> mutations = new ArrayList<>();
+    private List<Node> nodes = new ArrayList<>();
     private NodeCollection nodesToShow;
     private NodeCollection bubbles;
 
@@ -29,34 +29,35 @@ public class StructureDesigner implements IDesigner {
     }
 
     public void design(){
-        getMutations();
+//        getMutations();
         linkMutationsToMain();
-        createBubbles();
+        nodes = nodeCollection.getNodes().stream().collect(Collectors.toList());
+        nodesToShow = new NodeList(nodes.size());//nodeCollection;//
+        Node tempNode, currentNode;
+//        for(int i = 0; i < genomes.length; i++) {
+        int i = 8;
+            for (int nodeId : genomes[i].getNodesIds()) {// genomes[9].getNodesIds()) {
+                currentNode = nodeCollection.get(nodeId);
+                tempNode = new Segment(getUniqueId(nodeId, i), currentNode.getData(), currentNode.getColumn(), currentNode.getOriGenomes(), currentNode.getCrdGenome(), genomes.length);
+                tempNode.setData(currentNode.getData());
+                tempNode.setXY(currentNode.getIdPos()[i].getItem1(), currentNode.getIdPos()[i].getItem2());
+                tempNode.getBackLinks().addAll(currentNode.getBackLinks());
+                nodesToShow.put(nodeId, tempNode);
+            }
+//        }
+//        createBubbles();
 //        nodesToShow = new NodeList(mutations.size());
 //        for (int i = 0; i < mutations.size(); i++)
 //            nodesToShow.put(i + 1, mutations.get(i));
     }
 
-    private void getMutations() {
-        Mutation temp;
-        List<Integer> addedPos = new ArrayList<>();
-        int totalGenomes = genomes == null ? 0 : genomes.length;
-        boolean isNotRefGenome;
-        for (Node node : nodeCollection) {
-            isNotRefGenome =  !(node.getCrdGenome() != null && node.getCrdGenome().contains(".ref"));
-            if (isNotRefGenome && addedPos.contains(node.getX()))
-                continue;
-            addedPos.add(node.getX());
-            temp = new Mutation(mutations.size(), node.getX(), node.getOriGenomes(), node.getCrdGenome(), totalGenomes);
-            temp.setXY(node.getX(), node.getY());
-            temp.getBackLinks().addAll(node.getBackLinks());
-            mutations.add(temp);
-        }
+    private String getUniqueId(int a, int b){
+        return " "+(0.5*(a+b)*(a+b+1)+b);
     }
 
     private void linkInMainBranch(){
         Node lastNode = null;
-        for (Node node : mutations) {//mutationCollection) {
+        for (Node node : nodes) {//mutationCollection) {
             if(node.getCrdGenome() != null && node.getCrdGenome().contains(".ref")) {
                 node.getBackLinks().clear();
                 if (lastNode != null)
@@ -67,20 +68,20 @@ public class StructureDesigner implements IDesigner {
     }
 
     private void linkMutationsToMain(){
-        List<Mutation> mutationsProjections = new ArrayList<>();
-        for (Mutation node : mutations) {
+        List<Node> nodesProjections = new ArrayList<>();
+        for (Node node : nodes) {
             node.getBackLinks().clear();
             node.getLinks().clear();
             if(node.getCrdGenome().contains(".ref"))
                 continue;
-            Mutation projection = new Mutation(mutations.size() + mutationsProjections.size());
+            Node projection = new Segment(nodes.size() + " " + nodesProjections.size(), genomes.length);
             projection.setXY(node.getX(), 0);
             projection.setData("Mutated genomes: " + node.getData());
 //            projection.addLink(node);
-            mutationsProjections.add(projection);
+            nodesProjections.add(projection);
             node.getBackLinks().add(projection);
         }
-        mutations.addAll(mutationsProjections);
+        nodes.addAll(nodesProjections);
         linkInMainBranch();
     }
 
@@ -92,14 +93,14 @@ public class StructureDesigner implements IDesigner {
     private void collapseHorizontally(){
         bubbles = new NodeList(1000);
         nodesToShow = new NodeList(1000);
-        List<Mutation> tempBubble = new ArrayList<>();
+        List<Node> tempBubble = new ArrayList<>();
         int i = 0;
         int id = 0;
         int posX = 0;
         int counter = 0;
-        int nodesPerBubble = mutations.stream().filter(x -> x.getCrdGenome() != null && x.getY() == 0)
+        int nodesPerBubble = nodes.stream().filter(x -> x.getCrdGenome() != null && x.getY() == 0)
                 .collect(Collectors.toList()).size() / 6;
-        for(Mutation mutation: mutations){
+        for(Node mutation: nodes){
             if(mutation.getY() == 0){
                 if(i < nodesPerBubble){
                     tempBubble.add(mutation);
@@ -119,11 +120,11 @@ public class StructureDesigner implements IDesigner {
         connectBackLinks(nodesToShow);
     }
 
-    private void createBubble(List<Mutation> mutations, int id, int posX){
+    private void createBubble(List<Node> mutations, String id, int posX){
         mutations = mutations.stream().filter(x -> x.getCrdGenome() != null).collect(Collectors.toList());
         if(mutations.size() == 0)
             return;
-        List<Mutation> mainBranch = mutations.stream().filter(m -> m.getCrdGenome().contains(".ref")).collect(Collectors.toList());
+        List<Node> mainBranch = mutations.stream().filter(m -> m.getCrdGenome().contains(".ref")).collect(Collectors.toList());
         int startPos;//, endPos;
         if(mainBranch != null && mainBranch.size() > 0) {
             startPos = mainBranch.stream().mapToInt(m -> m.getColumn()).min().getAsInt();
@@ -134,7 +135,7 @@ public class StructureDesigner implements IDesigner {
         }
         Bubble temp = new Bubble(id);//, mutations);
         temp.setXY(posX, 0);
-        temp.setData("Mutations: " + mutations.stream().mapToInt(m -> m.getMutations()).sum() +
+        temp.setData("Mutations: " + mutations.stream().mapToInt(m -> genomes.length - m.getOriGenomes().size()).sum() +
                 " Start: " + startPos);
         nodesToShow.put(id+1, temp);
         bubbles.put(id+1, new Bubble(id, mutations));
