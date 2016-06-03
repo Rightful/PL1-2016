@@ -1,4 +1,4 @@
-var miniHeight = 250;
+var miniHeight = 200;
 var width = $("#d3").width();
 var height = $(document).height() - $("#nav").height() - miniHeight;
 var miniWidth = width;
@@ -193,18 +193,14 @@ function defaultColor(d) {
 function highlightLineage(genome) {
     console.log("Highlight genome: " + genome);
     $.get("/api/lineage/" + genome.split(" ").join("_"), function(lineage) {
-        window.graphHandler.setSelectedGenome(genome, lineageColors[lineage]);
+        window.graphHandler.setSelectedGenome(genome, lineageColors[lineage], lineage);
         window.graphHandler.showGraph();
         line.attr("stroke", function (d) {
             if (d.lineages.indexOf(lineage) != -1) {
                 d.lineageHighlighted = true;
                 d.currentColor = lineageColors[lineage];
-                //window.color = lineageColors[lineage];
                 return lineageColors[lineage];
             } else {
-                //window.color = defaultColor(d);
-                //window.graphHandler.setSelectedGenome(genome, defaultColor(d));
-                //window.graphHandler.showGraph();
                 return defaultColor(d);
             }
         });
