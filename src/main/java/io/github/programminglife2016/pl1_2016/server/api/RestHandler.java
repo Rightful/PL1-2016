@@ -71,7 +71,8 @@ public class RestHandler implements ApiHandler {
      *
      * @param apiQuery a query to which the API should respond
      */
-    public final void addQuery(ApiQuery apiQuery) {
+    public final RestHandler addQuery(ApiQuery apiQuery) {
         queries.add(new EquivalentCompiledApiQuery(apiQuery));
+        return this;
     }
 }

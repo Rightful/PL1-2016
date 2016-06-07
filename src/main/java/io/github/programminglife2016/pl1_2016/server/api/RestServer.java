@@ -68,11 +68,11 @@ public class RestServer implements Server {
      * @throws IOException thrown if the server cannot obtain resources (e.g. ports).
      */
     public final void startServer() throws IOException {
-        ApiHandler apiHandler = new RestHandler();
-        apiHandler.addQuery(new ReturnAllNodesApiQuery(fdb));
-        apiHandler.addQuery(new GetStaticFileApiQuery());
-        apiHandler.addQuery(new RootIndexApiQuery());
-        apiHandler.addQuery(new IndividualSegmentDataApiQuery(nodeCollection));
+        ApiHandler apiHandler =
+                new RestHandler().addQuery(new ReturnAllNodesApiQuery(fdb))
+                                 .addQuery(new GetStaticFileApiQuery())
+                                 .addQuery(new RootIndexApiQuery())
+                                 .addQuery(new IndividualSegmentDataApiQuery(nodeCollection));
         if (subjects != null) {
             apiHandler.addQuery(new GetThresholdedBubblesApiQuery(fdb));
             apiHandler.addQuery(new GetLineageApiQuery(fdb));
