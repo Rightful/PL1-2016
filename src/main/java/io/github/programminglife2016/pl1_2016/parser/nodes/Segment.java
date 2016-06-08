@@ -34,7 +34,7 @@ public class Segment implements Node {
     public Segment(int id, String data, int column) {
         this.id = id;
         this.data = data;
-        this.column = column;
+        this.column = 8;
     }
 
     /**
